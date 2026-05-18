@@ -33,6 +33,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         tile.h tile.cpp
         collisionsystem.h collisionsystem.cpp
         levelgenerator.h levelgenerator.cpp
+        monster.h monster.cpp
+        item.h item.cpp
+        portal.h portal.cpp
+        configmanager.h configmanager.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET HorizontalPixelGame APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

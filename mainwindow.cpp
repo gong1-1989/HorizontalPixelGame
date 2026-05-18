@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,7 +15,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btn_start_clicked()
 {
-    m_start=new maingamewidget(this);
+    m_start = new maingamewidget(this);
     m_start->show();
 }
-
