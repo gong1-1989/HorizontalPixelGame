@@ -37,6 +37,7 @@ void maingamewidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_D:
     case Qt::Key_Right:
         p->keyRight = true;
+        break;
     case Qt::Key_W:
     case Qt::Key_Space:
         p->keyJump = true;

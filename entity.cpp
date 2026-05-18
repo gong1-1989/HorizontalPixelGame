@@ -3,7 +3,7 @@
 entity::entity()
     : pos(0, 0)
     , width(32)
-    , height(32)
+    , heigth(32)
     , resId(RES_GROUND)
     , velX(0)
     , velY(0)

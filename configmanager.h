@@ -9,6 +9,13 @@
 #include <QJsonArray>
 #include "resourcemanager.h"
 
+enum TileBehavior{
+    BEHAVIOR_NORMAL,
+    BEHAVIOR_TRAP,          //陷阱扣血
+    BEHAVIOR_MOVE_HORIZ,    //水平移动平台
+    BEHAVIOR_MOVE_VERT      //垂直移动平台
+};
+
 struct PhysicsConfig{
     float gravity;
     float moveSpeed;
@@ -44,6 +51,7 @@ struct LevelConfig{
     int baseMonsterNum; //基础怪物数量
     int monsterAdd;     //每关增加怪物数量
     int chunkWidth;     //单个地块总宽度
+    int maxJumpHeight;  //全局最大可跳跃高度
 };
 struct TileConfig{
     QString type;
@@ -51,12 +59,20 @@ struct TileConfig{
     int heigth;
     bool isSolid;
     ResID resId;
+    TileBehavior behavior;
+    //移动平台参数
+    float moveSpeed;
+    int moveRange;
+    //陷阱伤害参数
+    int trapDamage;
 };
 
 struct LevelChunk{
     QString chunkName;
     int weight;                 //随机抽取权重
     int fixedBaseY;             //保底地面高度
+    int maxPlatformHeight;      //平台最大高度，限制跳跃可达
+    bool isBossChunk;           //是否BOSS专属平台
     QList<TileConfig> tiles;    //该地块包含的所有瓦片
 };
 
@@ -75,6 +91,7 @@ private:
     ConfigManager();
     static ConfigManager* m_instance;
     void SetDefault();
+    TileBehavior StrToBehavior(const QString&s);
 };
 
 #endif // CONFIGMANAGER_H

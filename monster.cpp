@@ -6,7 +6,7 @@
 Monster::Monster()
     :isChasing(false),attackTimer(0){
     width=32;
-    height=30;
+    heigth=30;
     resId=RES_MONSTER_NORMAL;
     auto& cfg=ConfigManager::instance()->monster;
     hp=cfg.hp;

@@ -21,6 +21,8 @@ void gamemain::Init()
     m_player.pos = QPointF(100, 300);
     //摄像机跟随玩家
     m_camera.SetFollowTarget(&m_player);
+    m_currentLevel=1;
+    m_coin=0;
 }
 void gamemain::NextLevel(){
     //清空旧场景
@@ -82,6 +84,8 @@ void gamemain::Update(float deltaTime)
     }
     //玩家死亡
     if(m_player.hp<=0) ResetGame();
+    //更新移动平台和陷阱
+    for(Tile*t:m_TileList) t->Update(deltaTime);
 }
 
 void gamemain::Draw(QPainter *painter)

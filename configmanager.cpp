@@ -11,6 +11,13 @@ ConfigManager::ConfigManager() {
     SetDefault();
 }
 
+TileBehavior ConfigManager::StrToBehavior(const QString &s){
+    if(s=="trap")return BEHAVIOR_TRAP;
+    if(s=="move_h")return BEHAVIOR_MOVE_HORIZ;
+    if(s=="move_v")return BEHAVIOR_MOVE_VERT;
+    return BEHAVIOR_NORMAL;
+}
+
 void ConfigManager::SetDefault(){
     physics.gravity=980.0f;
     physics.moveSpeed=280.0f;
@@ -34,6 +41,7 @@ void ConfigManager::SetDefault(){
     level.baseMonsterNum=5;
     level.monsterAdd=1;
     level.chunkWidth=384;
+    level.maxJumpHeight=160;
     //默认地块
     chunkList.clear();
 }
@@ -79,6 +87,7 @@ void ConfigManager::LoadConfig(const QString &path){
     level.baseMonsterNum=le["baseMonsterNum"].toInt(level.baseMonsterNum);
     level.monsterAdd=le["monsterAdd"].toInt(level.monsterAdd);
     level.chunkWidth=le["chunkWidth"].toInt(level.chunkWidth);
+    level.maxJumpHeight=le["maxJumpHeight"].toInt(level.maxJumpHeight);
     //加载地块模板
     chunkList.clear();
     auto chunks=obj["chunks"].toArray();
@@ -88,6 +97,8 @@ void ConfigManager::LoadConfig(const QString &path){
         lc.chunkName=co["chunkName"].toString();
         lc.weight=co["weight"].toInt(1);
         lc.fixedBaseY=co["fixedBaseY"].toInt(450);
+        lc.maxPlatformHeight=co["maxPlatformHeight"].toInt(level.maxJumpHeight);
+        lc.isBossChunk=co["isBossChunk"].toBool(false);
         auto tiles=co["tiles"].toArray();
         for(auto t:tiles){
             QJsonObject to=t.toObject();
@@ -97,6 +108,10 @@ void ConfigManager::LoadConfig(const QString &path){
             tc.heigth=to["heigth"].toInt();
             tc.isSolid=to["isSolid"].toBool();
             tc.resId=(ResID)to["resId"].toInt(0);
+            tc.behavior=StrToBehavior(to["behaviot"].toString("normal"));
+            tc.moveSpeed=to["moveSpeed"].toDouble(80);
+            tc.moveRange=to["moveRange"].toInt(100);
+            tc.trapDamage=to["trapDamage"].toInt(10);
             lc.tiles.append(tc);
         }
         chunkList.append(lc);

@@ -13,7 +13,7 @@ public:
     //位置、大小
     QPointF pos;
     int width;
-    int height;
+    int heigth;
     ResID resId; //绑定美术素材ID
     //物理属性
     float velX;

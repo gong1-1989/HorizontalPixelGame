@@ -46,8 +46,9 @@ QList<Tile *> LevelGenerator::GenerateSegment(int startX, const LevelChunk &chun
         Tile *t = new Tile();
         t->pos = QPointF(startX + i * 32, chunk.fixedBaseY);
         t->width=32;
-        t->height=32;
+        t->heigth=32;
         t->isSolid=true;
+        t->behavior=BEHAVIOR_NORMAL;
         t->resId = RES_GROUND;
         seg.append(t);
     }
@@ -58,9 +59,13 @@ QList<Tile *> LevelGenerator::GenerateSegment(int startX, const LevelChunk &chun
         int localX=QRandomGenerator::global()->bounded(2,10)*td.width;
         t->pos=QPointF(startX+localX,QRandomGenerator::global()->bounded(200,400));
         t->width=td.width;
-        t->height=td.heigth;
+        t->heigth=td.heigth;
         t->isSolid=td.isSolid;
+        t->behavior=td.behavior;
         t->resId=td.resId;
+        t->moveSpeed=td.moveSpeed;
+        t->moveRange=td.moveRange;
+        t->trapDamage=td.trapDamage;
         seg.append(t);
     }
     return seg;

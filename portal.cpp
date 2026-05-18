@@ -3,5 +3,5 @@
 
 Portal::Portal() {
     width=48;
-    height=64;
+    heigth=64;
 }

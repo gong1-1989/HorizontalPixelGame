@@ -29,49 +29,111 @@
         "lengthAdd":200,
         "baseMonsterNum":5,
         "monsterAdd":1,
-        "chunkWidth":384
+        "chunkWidth":384,
+        "maxJumpHeight":160
     },
     "chunks":[
         {
             "chunkName":"基础平台段",
             "weight":5,
             "fixedBaseY":450,
+            "maxPlatformHeight":160,
+            "isBossChunk":false,
             "tiles":[
                 {
                     "type":"platform",
                     "width":32,
                     "heigth":32,
                     "isSolid":true,
-                    "resId":2
+                    "resId":2,
+                    "behavior":"normal",
+                    "moveSpeed":0,
+                    "moveRange":0,
+                    "trapDamage":0
                 }
             ]
         },
         {
-            "chunkName":"高台复杂段",
-            "weight":3,
+            "chunkName":"移动平台段",
+            "weight":2,
             "fixedBaseY":450,
+            "maxPlatformHeight":160,
+            "isBossChunk":false,
             "tiles":[
                 {
                     "type":"platform",
                     "width":32,
                     "heigth":32,
                     "isSolid":true,
-                    "resId":2
+                    "resId":2,
+                    "behavior":"move_h",
+                    "moveSpeed":80,
+                    "moveRange":100,
+                    "trapDamage":0
                 },
                 {
                     "type":"platform",
                     "width":32,
                     "heigth":32,
                     "isSolid":true,
-                    "resId":2
+                    "resId":2,
+                    "behavior":"move_v",
+                    "moveSpeed":60,
+                    "moveRange":80,
+                    "trapDamage":0
                 }
             ]
         },
         {
-            "chunkName":"简单地面段",
-            "weight":8,
+            "chunkName":"陷阱危险段",
+            "weight":2,
             "fixedBaseY":450,
-            "tiles":[]
+            "maxPlatformHeight":160,
+            "isBossChunk":false,
+            "tiles":[
+                {
+                    "type":"trap",
+                    "width":32,
+                    "heigth":32,
+                    "isSolid":true,
+                    "resId":2,
+                    "behavior":"move_v",
+                    "moveSpeed":0,
+                    "moveRange":0,
+                    "trapDamage":15
+                }
+            ]
+        },
+        {
+            "chunkName":"Boss专属高台段",
+            "weight":1,
+            "fixedBaseY":450,
+            "maxPlatformHeight":160,
+            "isBossChunk":true,
+            "tiles":[
+                {
+                    "type":"platform",
+                    "width":32,
+                    "heigth":32,
+                    "isSolid":true,
+                    "resId":2,
+                    "behavior":"normal",
+                    "moveSpeed":0,
+                    "moveRange":0,
+                    "trapDamage":0
+                },
+                {
+                    "type":"platform",
+                    "width":32,
+                    "heigth":32,
+                    "isSolid":true,
+                    "resId":2,
+                    "behavior":"move_v",
+                    "moveSpeed":60,
+                    "moveRange":80,
+                    "trapDamage":0
+                }
+            ]
         }
     ]
 }

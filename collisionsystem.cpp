@@ -8,17 +8,17 @@ bool CollisionSystem::CheckCollision(const QRectF &a, const QRectF &b)
 }
 void CollisionSystem::ResolveCollision(Player *player, const QList<Tile *> tiles)
 {
-    QRectF playerRect(player->pos.x(), player->pos.y(), player->width, player->height);
+    QRectF playerRect(player->pos.x(), player->pos.y(), player->width, player->heigth);
     player->isGrounded = false;
     for (Tile *tile : tiles) {
         if (!tile->isSolid) continue;
-        QRectF tileRect(tile->pos.x(), tile->pos.y(), tile->width, tile->height);
+        QRectF tileRect(tile->pos.x(), tile->pos.y(), tile->width, tile->heigth);
         if (CheckCollision(playerRect, tileRect)) {            
             //垂直碰撞（落地、头顶碰撞）
             float overlapTop = playerRect.bottom() - tileRect.top();
             float overlapBottom = tileRect.bottom() - playerRect.top();
             if (overlapTop < overlapBottom&& player->velY>=0) {
-                player->pos.setY(tileRect.top() - player->height);
+                player->pos.setY(tileRect.top() - player->heigth);
                 player->velY = 0;
                 player->isGrounded = true;
             } else if(overlapBottom<overlapBottom&&player->velY<0){
@@ -26,25 +26,31 @@ void CollisionSystem::ResolveCollision(Player *player, const QList<Tile *> tiles
                 player->velY = 0;
             }
             //水平碰撞（左右卡墙）
-            float overlapLeft = playerRect.right() - tileRect.left();
+            /*float overlapLeft = playerRect.right() - tileRect.left();
             float overlapRight = tileRect.right() - playerRect.left();
             if (overlapLeft < overlapRight&&player->velX>=0){
-                player->pos.setX(tileRect.left() - player->width);
+                player->pos.setX(tileRect.left() - player->width);                
             }else if(overlapRight<overlapLeft&&player->velX<0){
                 player->pos.setX(tileRect.right());
-                player->velX=0;
-            }
-        }       
+                //player->velX=0;
+            }*/
+        }
+        if(tile->behavior!=BEHAVIOR_TRAP) continue;
+        if(tile->trapCd<1.0f) continue;
+        if(CheckCollision(playerRect,tileRect)){
+            player->hp-=tile->trapDamage;
+            tile->trapCd=0;
+        }
     }
 }
 
 void CollisionSystem::ResolveCollision(Monster *monster, const QList<Tile *> tiles){
-    QRectF rect(monster->pos.x(),monster->pos.y(),monster->width,monster->height);
+    QRectF rect(monster->pos.x(),monster->pos.y(),monster->width,monster->heigth);
     for(Tile*t:tiles){
         if(!t->isSolid)continue;
-        QRectF tRect(t->pos.x(),t->pos.y(),t->width,t->height);
+        QRectF tRect(t->pos.x(),t->pos.y(),t->width,t->heigth);
         if(CheckCollision(rect,tRect)){
-            monster->pos.setY(tRect.top()-monster->height);
+            monster->pos.setY(tRect.top()-monster->heigth);
             monster->velY=0;
         }
     }
@@ -96,9 +102,9 @@ void CollisionSystem::CheckMonsterAttack(Player *p, QList<Monster *> &mons){
 
 void CollisionSystem::CheckItemPick(Player *p, QList<Item *> &items, int &coin){
     auto& cfg=ConfigManager::instance()->item;
-    QRectF pRect(p->pos.x(),p->pos.y(),p->width,p->height);
+    QRectF pRect(p->pos.x(),p->pos.y(),p->width,p->heigth);
     for(auto it=items.begin();it!=items.end();){
-        QRectF iRect((*it)->pos.x(),(*it)->pos.y(),(*it)->width,(*it)->height);
+        QRectF iRect((*it)->pos.x(),(*it)->pos.y(),(*it)->width,(*it)->heigth);
         if(CheckCollision(pRect,iRect)){
             if((*it)->type==ITEM_COIN) coin+=cfg.coinValue;
             else if((*it)->type==ITEM_HP) p->hp=qMin(p->hp+cfg.healValue,p->maxHp);
@@ -112,7 +118,7 @@ void CollisionSystem::CheckItemPick(Player *p, QList<Item *> &items, int &coin){
 
 bool CollisionSystem::CheckPortalEnter(Player *p, Portal *portal){
     if(!p->isGrounded) return false;
-    QRectF pRect(p->pos.x(),p->pos.y(),p->width,p->height);
-    QRectF poRect(portal->pos.x(),portal->pos.y(),portal->width,portal->height);
+    QRectF pRect(p->pos.x(),p->pos.y(),p->width,p->heigth);
+    QRectF poRect(portal->pos.x(),portal->pos.y(),portal->width,portal->heigth);
     return CheckCollision(pRect,poRect);
 }

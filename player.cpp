@@ -11,7 +11,7 @@ Player::Player()
     ,keyAttack(false)
 {
     width = 32;
-    height = 32;
+    heigth = 32;
     resId = RES_PLAYER_IDLE;
     auto& cfg=ConfigManager::instance()->player;
     hp=cfg.hp;
