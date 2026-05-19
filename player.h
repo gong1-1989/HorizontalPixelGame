@@ -32,6 +32,7 @@ public:
     AnimState animState;
     float animTimer;
     int animFrame;
+    void RefreshSize();
     void Update(float deltaTime) override;
 };
 

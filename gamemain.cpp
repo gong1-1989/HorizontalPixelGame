@@ -23,6 +23,7 @@ void gamemain::Init()
     m_camera.SetFollowTarget(&m_player);
     m_currentLevel=1;
     m_coin=0;
+    m_player.RefreshSize();
 }
 void gamemain::NextLevel(){
     //清空旧场景

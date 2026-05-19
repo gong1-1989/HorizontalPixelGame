@@ -12,7 +12,7 @@ Tile::Tile()
 void Tile::Update(float deltaTime){
     if(behavior==BEHAVIOR_MOVE_HORIZ){
         pos.rx()+=moveSpeed*moveDir*deltaTime;
-        if(pos.x()>originX+moveRange||pos.x()<originX-moveRange) moveDir*=-1;
+        if(pos.x()>+moveRange||pos.x()<originX-moveRange) moveDir*=-1;
     }
     if(behavior==BEHAVIOR_MOVE_VERT){
         pos.ry()+=moveSpeed*moveDir*deltaTime;

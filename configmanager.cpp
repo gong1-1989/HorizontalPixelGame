@@ -42,9 +42,9 @@ void ConfigManager::SetDefault(){
     player.walkStartFrame=2;
     player.walkFrameCnt=9;
     //跳跃11-14
-    player.walkStartFrame=11;
+    player.jumpStartFrame=11;
     player.jumpFrameCnt=4;
-    //攻击15~21
+    //攻击15~22
     player.attackStartFrame=15;
     player.attackFrameCnt=8;
     monster.hp=30;

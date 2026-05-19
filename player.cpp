@@ -21,9 +21,7 @@ Player::Player()
     maxHp=cfg.maxHp;
     velX=0;
     velY=0;
-    QSize sz=resourcemanager::instance()->GetSize(resId,0);
-    width = sz.width();
-    heigth = sz.height();
+
 }
 void Player::Update(float deltaTime)
 {
@@ -73,23 +71,32 @@ void Player::Update(float deltaTime)
     //帧动画播放
     animTimer+=deltaTime*pCfg.animSpeed;
     int maxFrame=0;
+    int startFrame=0;
     switch (animState) {
     case ANIM_IDLE:
         maxFrame=pCfg.idleFrameCnt;
+        startFrame=pCfg.idleStartFrame;
         break;
     case ANIM_WALK:
         maxFrame=pCfg.walkFrameCnt;
+        startFrame=pCfg.walkStartFrame;
         break;
     case ANIM_JUMP:
         maxFrame=pCfg.jumpFrameCnt;
+        startFrame=pCfg.jumpStartFrame;
         break;
     case ANIM_ATTACK:
         maxFrame=pCfg.attackFrameCnt;
+        startFrame=pCfg.attackStartFrame;
         break;
-    }
-    if(animTimer>=1.0f){
-        animTimer=0;
-        animFrame=(animFrame+1)%maxFrame;
-    }
+    }    
+    if(animTimer<1.0f) return;
+    animTimer=0;
+    animFrame=(animFrame>=startFrame&&animFrame<startFrame+maxFrame-1)?animFrame+1:startFrame;
+}
 
+void Player::RefreshSize(){
+    QSize sz=resourcemanager::instance()->GetSize(resId,animFrame);
+    width = sz.width();
+    heigth = sz.height();
 }

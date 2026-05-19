@@ -15,7 +15,7 @@
         "idleFrameCnt":2,
         "walkStartFrame":2,
         "walkFrameCnt":9,
-        "walkStartFrame":11,
+        "jumpStartFrame":11,
         "jumpFrameCnt":4,
         "attackStartFrame":15,
         "attackFrameCnt":8
