@@ -15,6 +15,7 @@ public:
     int width;
     int heigth;
     ResID resId; //绑定美术素材ID
+    int frame;
     //物理属性
     float velX;
     float velY;

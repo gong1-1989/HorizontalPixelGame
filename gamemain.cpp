@@ -34,10 +34,10 @@ void gamemain::NextLevel(){
     m_itemList.clear();
     //生产新关卡
     auto& cfg=ConfigManager::instance()->level;
-    int len=cfg.baseLength+m_currentLevel*cfg.lengthAdd;
-    m_TileList=LevelGenerator::GenerateLevel(len);
+    int len=cfg.worldWidth;
+    m_TileList=LevelGenerator::GenerateLevel();
     //生成怪物
-    int monsterCount=cfg.baseMonsterNum+m_currentLevel*cfg.monsterAdd;
+    int monsterCount=5;
     for(int i=0;i<monsterCount;i++){
         Monster* m=new Monster();
         int x=QRandomGenerator::global()->bounded(400,len-200);
@@ -90,7 +90,7 @@ void gamemain::Update(float deltaTime)
 
 void gamemain::Draw(QPainter *painter)
 {
-    //应用摄像机偏移
+    //应用摄像机偏移    
     painter->translate(-m_camera.GetOffset().x(), -m_camera.GetOffset().y());
     //渲染场景瓦片
     for (Tile *t : m_TileList) t->Draw(painter);
@@ -99,10 +99,23 @@ void gamemain::Draw(QPainter *painter)
     //渲染怪物
     for(Monster*m : m_monsterList) m->Draw(painter);
     //渲染玩家
-    m_player.Draw(painter);
+    painter->save();
+    float px=m_player.pos.x();
+    float py=m_player.pos.y();
+    if(m_player.facingRight){
+        painter->scale(-1,1);
+        painter->translate(-(px+m_player.width),py);
+        px=0;
+        py=0;
+    }
+    painter->drawPixmap(px,py
+                        ,resourcemanager::instance()->GetPixmap(m_player.resId,m_player.animFrame));
+    painter->restore();
+    //m_player.Draw(painter);
     //渲染道具
     for(Item* i:m_itemList) i->Draw(painter);
     //绘制UI（固定在屏幕左上角）
+
     painter->resetTransform();
     painter->setPen(Qt::white);
     painter->setFont(QFont("Arial",12));

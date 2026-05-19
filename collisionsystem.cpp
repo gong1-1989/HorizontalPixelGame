@@ -15,32 +15,42 @@ void CollisionSystem::ResolveCollision(Player *player, const QList<Tile *> tiles
         QRectF tileRect(tile->pos.x(), tile->pos.y(), tile->width, tile->heigth);
         if (CheckCollision(playerRect, tileRect)) {            
             //垂直碰撞（落地、头顶碰撞）
-            float overlapTop = playerRect.bottom() - tileRect.top();
-            float overlapBottom = tileRect.bottom() - playerRect.top();
-            if (overlapTop < overlapBottom&& player->velY>=0) {
-                player->pos.setY(tileRect.top() - player->heigth);
-                player->velY = 0;
-                player->isGrounded = true;
-            } else if(overlapBottom<overlapBottom&&player->velY<0){
-                player->pos.setY(tileRect.bottom());
-                player->velY = 0;
+            if(tile->resId==RES_GROUND||tile->resId==RES_PLATFORM){
+                float overlapTop = playerRect.bottom() - tileRect.top();
+                float overlapBottom = tileRect.bottom() - playerRect.top();
+                if (overlapTop < overlapBottom&& player->velY>=0) {
+                    player->pos.setY(tileRect.top() - player->heigth);
+                    player->velY = 0;
+                    player->isGrounded = true;
+                } /*else if(overlapBottom<overlapBottom&&player->velY<0){
+                    player->pos.setY(tileRect.bottom());
+                    player->velY = 0;
+                }*/
             }
-            //水平碰撞（左右卡墙）
-            /*float overlapLeft = playerRect.right() - tileRect.left();
-            float overlapRight = tileRect.right() - playerRect.left();
-            if (overlapLeft < overlapRight&&player->velX>=0){
-                player->pos.setX(tileRect.left() - player->width);                
-            }else if(overlapRight<overlapLeft&&player->velX<0){
-                player->pos.setX(tileRect.right());
-                //player->velX=0;
-            }*/
+            if(tile->resId==RES_WALL){
+                //水平碰撞（左右卡墙）
+                float overlapLeft = playerRect.right() - tileRect.left();
+                float overlapRight = tileRect.right() - playerRect.left();
+                if (overlapLeft < overlapRight&&player->velX>=0){
+                    player->pos.setX(tileRect.left() - player->width);
+                }else if(overlapRight<overlapLeft&&player->velX<0){
+                    player->pos.setX(tileRect.right());
+                    //player->velX=0;
+                }
+            }
+            if(tile->resId==RES_TRAP){
+                if(tile->trapCd>=1.0f)
+                {
+                    player->hp-=tile->trapDamage;
+                    tile->trapCd=0;
+                }
+            }
         }
-        if(tile->behavior!=BEHAVIOR_TRAP) continue;
-        if(tile->trapCd<1.0f) continue;
-        if(CheckCollision(playerRect,tileRect)){
-            player->hp-=tile->trapDamage;
-            tile->trapCd=0;
-        }
+        //边界检测
+        float worldLeft=0;
+        float worldRight=ConfigManager::instance()->level.worldWidth;
+        if(player->pos.x()<=worldLeft) player->pos.setX(worldLeft);
+        if(player->pos.x()+player->width>worldRight) player->pos.setX(worldRight-player->width);
     }
 }
 
@@ -54,6 +64,10 @@ void CollisionSystem::ResolveCollision(Monster *monster, const QList<Tile *> til
             monster->velY=0;
         }
     }
+    float worldLeft=0;
+    float worldRight=ConfigManager::instance()->level.worldWidth;
+    if(monster->pos.x()<=worldLeft) monster->pos.setX(worldLeft);
+    if(monster->pos.x()+monster->width>worldRight) monster->pos.setX(worldRight-monster->width);
 }
 void CollisionSystem::CheckPlayerAttack(Player *p, QList<Monster *> &mons){
     if(!p->isAttacking) return;

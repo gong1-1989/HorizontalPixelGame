@@ -1,19 +1,29 @@
 {
     "physics":{
         "gravity":980,
-        "moveSpeed":280,
+        "moveSpeed":150,
         "jumpForce":420,
         "doubleJumpForce":360
     },
     "player":{
         "hp":100,
         "maxHp":100,
-        "attackDamage":10
+        "attackDamage":10,
+        "attackCd":0.5,
+        "animSpeed":8.0,
+        "idleStartFrame":0,
+        "idleFrameCnt":2,
+        "walkStartFrame":2,
+        "walkFrameCnt":9,
+        "walkStartFrame":11,
+        "jumpFrameCnt":4,
+        "attackStartFrame":15,
+        "attackFrameCnt":8
     },
     "monster":{
         "hp":30,
         "maxHp":30,
-        "speed":120,
+        "speed":100,
         "chaseRange":250,
         "patrolRange":300,
         "attackCd":1.0,
@@ -25,115 +35,65 @@
         "dropRate":0.5
     },
     "level":{
-        "baseLength":2000,
-        "lengthAdd":200,
-        "baseMonsterNum":5,
-        "monsterAdd":1,
-        "chunkWidth":384,
-        "maxJumpHeight":160
-    },
-    "chunks":[
-        {
-            "chunkName":"基础平台段",
-            "weight":5,
-            "fixedBaseY":450,
-            "maxPlatformHeight":160,
-            "isBossChunk":false,
-            "tiles":[
-                {
-                    "type":"platform",
-                    "width":32,
-                    "heigth":32,
-                    "isSolid":true,
-                    "resId":2,
-                    "behavior":"normal",
-                    "moveSpeed":0,
-                    "moveRange":0,
-                    "trapDamage":0
-                }
-            ]
-        },
-        {
-            "chunkName":"移动平台段",
-            "weight":2,
-            "fixedBaseY":450,
-            "maxPlatformHeight":160,
-            "isBossChunk":false,
-            "tiles":[
-                {
-                    "type":"platform",
-                    "width":32,
-                    "heigth":32,
-                    "isSolid":true,
-                    "resId":2,
-                    "behavior":"move_h",
-                    "moveSpeed":80,
-                    "moveRange":100,
-                    "trapDamage":0
-                },
-                {
-                    "type":"platform",
-                    "width":32,
-                    "heigth":32,
-                    "isSolid":true,
-                    "resId":2,
-                    "behavior":"move_v",
-                    "moveSpeed":60,
-                    "moveRange":80,
-                    "trapDamage":0
-                }
-            ]
-        },
-        {
-            "chunkName":"陷阱危险段",
-            "weight":2,
-            "fixedBaseY":450,
-            "maxPlatformHeight":160,
-            "isBossChunk":false,
-            "tiles":[
-                {
-                    "type":"trap",
-                    "width":32,
-                    "heigth":32,
-                    "isSolid":true,
-                    "resId":2,
-                    "behavior":"move_v",
-                    "moveSpeed":0,
-                    "moveRange":0,
-                    "trapDamage":15
-                }
-            ]
-        },
-        {
-            "chunkName":"Boss专属高台段",
-            "weight":1,
-            "fixedBaseY":450,
-            "maxPlatformHeight":160,
-            "isBossChunk":true,
-            "tiles":[
-                {
-                    "type":"platform",
-                    "width":32,
-                    "heigth":32,
-                    "isSolid":true,
-                    "resId":2,
-                    "behavior":"normal",
-                    "moveSpeed":0,
-                    "moveRange":0,
-                    "trapDamage":0
-                },
-                {
-                    "type":"platform",
-                    "width":32,
-                    "heigth":32,
-                    "isSolid":true,
-                    "resId":2,
-                    "behavior":"move_v",
-                    "moveSpeed":60,
-                    "moveRange":80,
-                    "trapDamage":0
-                }
-            ]
-        }
-    ]
+        "levelName":"第一关",
+        "worldWidth":2560,
+        "tiles":[
+            {
+                "type":"groud",
+                "pos":
+                [
+                    {"x":0,"y":450},
+                    {"x":87,"y":450},
+                    {"x":174,"y":450},
+                    {"x":261,"y":450},
+                    {"x":348,"y":450},
+                    {"x":435,"y":450}
+                ],
+                "isSolid":true,
+                "behavior":"normal",
+                "moveSpeed":0,
+                "moveRange":0,
+                "trapDamage":0
+            },
+            {
+                "type":"platform",
+                "pos":
+                [
+                    {"x":100,"y":200},
+                    {"x":200,"y":200}
+                ],
+                "isSolid":true,
+                "behavior":"move_h",
+                "moveSpeed":80,
+                "moveRange":80,
+                "trapDamage":0
+            },
+            {
+                "type":"trap",
+                "pos":
+                [
+                    {"x":200,"y":430}
+                ],
+                "isSolid":false,
+                "behavior":"trap",
+                "moveSpeed":0,
+                "moveRange":0,
+                "trapDamage":15
+            },
+            {
+                "type":"platform",
+                "pos":
+                [
+                    {"x":50,"y":350},
+                    {"x":120,"y":350},
+                    {"x":348,"y":350}
+                ],
+                "isSolid":true,
+                "behavior":"normal",
+                "moveSpeed":0,
+                "moveRange":0,
+                "trapDamage":0
+            }
+        ]
+    }
 }

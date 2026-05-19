@@ -3,6 +3,14 @@
 //玩家实体子类
 #include <QKeyEvent>
 #include "entity.h"
+#include "resourcemanager.h"
+
+enum AnimState{
+    ANIM_IDLE,
+    ANIM_WALK,
+    ANIM_JUMP,
+    ANIM_ATTACK
+};
 
 class Player : public entity
 {
@@ -16,8 +24,14 @@ public:
     bool canDoubleJump;
     bool isAttacking;
     bool keyAttack;
+    bool facingRight;   //角色朝向
     int hp;
     int maxHp;
+    float attackTime;
+    //动画状态机
+    AnimState animState;
+    float animTimer;
+    int animFrame;
     void Update(float deltaTime) override;
 };
 

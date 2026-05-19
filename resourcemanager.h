@@ -4,15 +4,18 @@
 #include <QMap>
 #include <QPixmap>
 #include <QString>
+#include <QSize>
+
 //统一素材ID，后期绑定PNG图片
 enum ResID {
     //玩家
     RES_PLAYER_IDLE,
-    RES_PLAYER_RUN,
     //场景
-    RES_GROUND,
-    RES_PLATFORM,
-    RES_PROTAL,
+    RES_GROUND,     //地面
+    RES_PLATFORM,   //平台
+    RES_WALL,       //墙体
+    RES_TRAP,       //陷阱
+    RES_PROTAL,     //传送门
     //怪物
     RES_MONSTER_NORMAL,
     //道具
@@ -28,13 +31,16 @@ public:
     static resourcemanager *instance();
     //预加载所有图片（后期填入真实路径）
     void LoadAllResources();
+    void LoadSpriteSheet(ResID id,const QString&path,int frameCount);
     //获取素材
-    QPixmap GetPixmap(ResID id);
+    QPixmap GetPixmap(ResID id,int frame=0);
+    QSize GetSize(ResID id,int frame=0);
 
 private:
     resourcemanager();
     static resourcemanager *m_instance;
     QMap<ResID, QPixmap> m_pixmapCache;
+    QMap<ResID,QList<QPixmap>> m_spriteFrames;
 };
 
 #endif // RESOURCEMANAGER_H

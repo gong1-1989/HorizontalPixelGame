@@ -1,9 +1,13 @@
 <RCC>
     <qresource prefix="/Image">
+        <file>Resource/Image/RES_MONSTER_NORMAL.png</file>
+        <file>Resource/Image/RES_PROTAL.gif</file>
+        <file>Resource/Image/RES_ITEM_HP.png</file>
+        <file>Resource/Image/RES_TRAP.png</file>
         <file>Resource/Image/RES_GROUND.png</file>
         <file>Resource/Image/RES_PLATFORM.png</file>
+        <file>Resource/Image/RES_WALL.png</file>
         <file>Resource/Image/RES_PLAYER_IDLE.png</file>
-        <file>Resource/Image/RES_MONSTER_NORMAL.png</file>
     </qresource>
     <qresource prefix="/Config">
         <file>Resource/Config/game_config.json</file>

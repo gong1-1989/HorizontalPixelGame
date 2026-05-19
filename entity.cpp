@@ -2,9 +2,10 @@
 
 entity::entity()
     : pos(0, 0)
-    , width(32)
-    , heigth(32)
+    , width(0)
+    , heigth(0)
     , resId(RES_GROUND)
+    , frame(0)
     , velX(0)
     , velY(0)
     , isGrounded(false)
@@ -17,5 +18,5 @@ void entity::Update(float deltaTime)
 void entity::Draw(QPainter *painter)
 {
     //统一渲染美术图片
-    painter->drawPixmap(pos.x(), pos.y(), resourcemanager::instance()->GetPixmap(resId));
+    painter->drawPixmap(pos.x(), pos.y(), resourcemanager::instance()->GetPixmap(resId,frame));
 }

@@ -18,6 +18,13 @@ TileBehavior ConfigManager::StrToBehavior(const QString &s){
     return BEHAVIOR_NORMAL;
 }
 
+ResID ConfigManager::strToResid(const QString&s){
+    if(s=="groud") return RES_GROUND;
+    if(s=="platform") return RES_PLATFORM;
+    if(s=="trap") return RES_TRAP;
+    return RES_WALL;
+}
+
 void ConfigManager::SetDefault(){
     physics.gravity=980.0f;
     physics.moveSpeed=280.0f;
@@ -26,6 +33,20 @@ void ConfigManager::SetDefault(){
     player.hp=100;
     player.maxHp=100;
     player.attackDamage=10;
+    player.attackCd=0.5f;
+    player.animSpeed=8.0f;
+    //待机0~1
+    player.idleStartFrame=0;
+    player.idleFrameCnt=2;
+    //行走2~10
+    player.walkStartFrame=2;
+    player.walkFrameCnt=9;
+    //跳跃11-14
+    player.walkStartFrame=11;
+    player.jumpFrameCnt=4;
+    //攻击15~21
+    player.attackStartFrame=15;
+    player.attackFrameCnt=8;
     monster.hp=30;
     monster.maxHp=30;
     monster.speed=120.0f;
@@ -36,14 +57,8 @@ void ConfigManager::SetDefault(){
     item.coinValue=10;
     item.healValue=20;
     item.dropRate=0.5f;
-    level.baseLength=2000;
-    level.lengthAdd=200;
-    level.baseMonsterNum=5;
-    level.monsterAdd=1;
-    level.chunkWidth=384;
-    level.maxJumpHeight=160;
-    //默认地块
-    chunkList.clear();
+    level.worldWidth=2000;
+    level.tiles.clear();
 }
 
 void ConfigManager::LoadConfig(const QString &path){
@@ -66,6 +81,16 @@ void ConfigManager::LoadConfig(const QString &path){
     player.hp=pl["hp"].toInt(player.hp);
     player.maxHp=pl["maxHp"].toInt(player.maxHp);
     player.attackDamage=pl["attackDamage"].toInt(player.attackDamage);
+    player.attackCd=pl["attackCd"].toDouble(player.attackCd);
+    player.animSpeed=pl["animSpeed"].toDouble(player.animSpeed);
+    player.idleStartFrame=pl["idleStartFrame"].toInt(player.idleStartFrame);
+    player.idleFrameCnt=pl["idleFrameCnt"].toInt(player.idleFrameCnt);
+    player.walkStartFrame=pl["walkStartFrame"].toInt(player.walkStartFrame);
+    player.walkFrameCnt=pl["walkFrameCnt"].toInt(player.walkFrameCnt);
+    player.jumpStartFrame=pl["jumpStartFrame"].toInt(player.jumpStartFrame);
+    player.jumpFrameCnt=pl["jumpFrameCnt"].toInt(player.jumpFrameCnt);
+    player.attackStartFrame=pl["attackStartFrame"].toInt(player.attackStartFrame);
+    player.attackFrameCnt=pl["attackFrameCnt"].toInt(player.attackFrameCnt);
     //怪物
     auto mo=obj["monster"].toObject();
     monster.hp=mo["hp"].toInt(monster.hp);
@@ -82,39 +107,31 @@ void ConfigManager::LoadConfig(const QString &path){
     item.dropRate=it["dropRate"].toDouble(item.dropRate);
     //关卡
     auto le=obj["level"].toObject();
-    level.baseLength=le["baseLength"].toInt(level.baseLength);
-    level.lengthAdd=le["lengthAdd"].toInt(level.lengthAdd);
-    level.baseMonsterNum=le["baseMonsterNum"].toInt(level.baseMonsterNum);
-    level.monsterAdd=le["monsterAdd"].toInt(level.monsterAdd);
-    level.chunkWidth=le["chunkWidth"].toInt(level.chunkWidth);
-    level.maxJumpHeight=le["maxJumpHeight"].toInt(level.maxJumpHeight);
+    level.levelName=le["levelName"].toString(level.levelName);
+    level.worldWidth=le["worldWidth"].toInt(level.worldWidth);
     //加载地块模板
-    chunkList.clear();
-    auto chunks=obj["chunks"].toArray();
-    for(auto c:chunks){
+    level.tiles.clear();
+    auto tiles=le["tiles"].toArray();
+    for(auto c:tiles){
         QJsonObject co=c.toObject();
-        LevelChunk lc;
-        lc.chunkName=co["chunkName"].toString();
-        lc.weight=co["weight"].toInt(1);
-        lc.fixedBaseY=co["fixedBaseY"].toInt(450);
-        lc.maxPlatformHeight=co["maxPlatformHeight"].toInt(level.maxJumpHeight);
-        lc.isBossChunk=co["isBossChunk"].toBool(false);
-        auto tiles=co["tiles"].toArray();
-        for(auto t:tiles){
-            QJsonObject to=t.toObject();
-            TileConfig tc;
-            tc.type=to["type"].toString();
-            tc.width=to["width"].toInt();
-            tc.heigth=to["heigth"].toInt();
-            tc.isSolid=to["isSolid"].toBool();
-            tc.resId=(ResID)to["resId"].toInt(0);
-            tc.behavior=StrToBehavior(to["behaviot"].toString("normal"));
-            tc.moveSpeed=to["moveSpeed"].toDouble(80);
-            tc.moveRange=to["moveRange"].toInt(100);
-            tc.trapDamage=to["trapDamage"].toInt(10);
-            lc.tiles.append(tc);
+        TileConfig lc;
+        lc.type=co["type"].toString();
+        lc.width=co["width"].toInt(0);
+        lc.heigth=co["heigth"].toInt(0);
+        lc.isSolid=co["isSolid"].toBool(true);
+        lc.behavior=StrToBehavior(co["behavior"].toString("normal"));
+        lc.moveSpeed=co["moveSpeed"].toDouble(80);
+        lc.moveRange=co["moveRange"].toInt(100);
+        lc.trapDamage=co["trapDamage"].toInt(10);
+        auto posArr=co["pos"].toArray();
+        for(auto p:posArr){
+            QJsonObject po=p.toObject();
+            TilePos tp;
+            tp.x=po["x"].toInt();
+            tp.y=po["y"].toInt();
+            lc.pos.append(tp);
         }
-        chunkList.append(lc);
-
+        lc.resId=strToResid(lc.type);
+        level.tiles.append(lc);
     }
 }

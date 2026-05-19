@@ -27,6 +27,17 @@ struct PlayerConfig{
     int hp;
     int maxHp;
     int attackDamage;
+    float attackCd;
+    //动画配置：同一张精灵图的帧范围
+    float animSpeed;
+    int idleStartFrame;
+    int idleFrameCnt;
+    int walkStartFrame;
+    int walkFrameCnt;
+    int jumpStartFrame;
+    int jumpFrameCnt;
+    int attackStartFrame;
+    int attackFrameCnt;
 };
 
 struct MonsterConfig{
@@ -45,16 +56,14 @@ struct ItemConfig{
     float dropRate; //怪物死亡掉落概率0-1
 };
 
-struct LevelConfig{
-    int baseLength;     //基础关卡长度
-    int lengthAdd;      //每关增加长度
-    int baseMonsterNum; //基础怪物数量
-    int monsterAdd;     //每关增加怪物数量
-    int chunkWidth;     //单个地块总宽度
-    int maxJumpHeight;  //全局最大可跳跃高度
+struct TilePos{
+    int x;
+    int y;
 };
+
 struct TileConfig{
     QString type;
+    QList<TilePos> pos;
     int width;
     int heigth;
     bool isSolid;
@@ -67,13 +76,10 @@ struct TileConfig{
     int trapDamage;
 };
 
-struct LevelChunk{
-    QString chunkName;
-    int weight;                 //随机抽取权重
-    int fixedBaseY;             //保底地面高度
-    int maxPlatformHeight;      //平台最大高度，限制跳跃可达
-    bool isBossChunk;           //是否BOSS专属平台
-    QList<TileConfig> tiles;    //该地块包含的所有瓦片
+struct LevelConfig{
+    QString levelName;
+    int worldWidth;
+    QList<TileConfig> tiles;
 };
 
 class ConfigManager
@@ -86,12 +92,12 @@ public:
     MonsterConfig monster;
     ItemConfig item;
     LevelConfig level;
-    QList<LevelChunk> chunkList;
 private:
     ConfigManager();
     static ConfigManager* m_instance;
     void SetDefault();
     TileBehavior StrToBehavior(const QString&s);
+    ResID strToResid(const QString&s);
 };
 
 #endif // CONFIGMANAGER_H
