@@ -11,8 +11,8 @@ void CollisionSystem::ResolveCollision(Player *player, const QList<Tile *> tiles
     QRectF playerRect(player->pos.x(), player->pos.y(), player->width, player->heigth);
     player->isGrounded = false;
     for (Tile *tile : tiles) {
-        if (!tile->isSolid) continue;
         QRectF tileRect(tile->pos.x(), tile->pos.y(), tile->width, tile->heigth);
+        if (!tile->isSolid) continue;        
         if (CheckCollision(playerRect, tileRect)) {            
             //垂直碰撞（落地、头顶碰撞）
             if(tile->resId==RES_GROUND||tile->resId==RES_PLATFORM){
@@ -73,9 +73,9 @@ void CollisionSystem::CheckPlayerAttack(Player *p, QList<Monster *> &mons){
     if(!p->isAttacking) return;
     auto& cfg=ConfigManager::instance()->player;
     auto& itemCfg=ConfigManager::instance()->item;
-    QRectF attackRect(p->pos.x()+32,p->pos.y(),32,32);
+    QRectF attackRect(p->pos.x()+p->attackLength,p->pos.y(),p->width,p->heigth);
     for(auto it=mons.begin();it!=mons.end();){
-        QRectF mRect((*it)->pos.x(),(*it)->pos.y(),32,32);
+        QRectF mRect((*it)->pos.x(),(*it)->pos.y(),(*it)->width,(*it)->heigth);
         if(CheckCollision(attackRect,mRect)){
             (*it)->hp-=cfg.attackDamage;
             if((*it)->hp<=0){
@@ -105,8 +105,8 @@ void CollisionSystem::CheckMonsterAttack(Player *p, QList<Monster *> &mons){
     auto& cfg=ConfigManager::instance()->monster;
     for (Monster* m:mons){
         if(m->attackTimer<cfg.attackCd) continue;
-        QRectF pRect(p->pos.x(),p->pos.y(),32,32);
-        QRectF mRect(m->pos.x(),m->pos.y(),32,32);
+        QRectF pRect(p->pos.x(),p->pos.y(),p->width,p->heigth);
+        QRectF mRect(m->pos.x(),m->pos.y(),m->width,m->heigth);
         if(CheckCollision(pRect,mRect)){
             p->hp-=cfg.damage;
             m->attackTimer=0;

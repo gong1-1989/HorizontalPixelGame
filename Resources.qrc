@@ -8,6 +8,7 @@
         <file>Resource/Image/RES_PLATFORM.png</file>
         <file>Resource/Image/RES_WALL.png</file>
         <file>Resource/Image/RES_PLAYER_IDLE.png</file>
+        <file>Resource/Image/RES_ITEM_COIN.png</file>
     </qresource>
     <qresource prefix="/Config">
         <file>Resource/Config/game_config.json</file>

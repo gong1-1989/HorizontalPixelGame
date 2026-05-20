@@ -28,6 +28,7 @@ public:
     int hp;
     int maxHp;
     float attackTime;
+    int attackLength;
     //动画状态机
     AnimState animState;
     float animTimer;

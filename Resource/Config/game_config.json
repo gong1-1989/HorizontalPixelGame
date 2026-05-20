@@ -74,7 +74,7 @@
                 [
                     {"x":200,"y":430}
                 ],
-                "isSolid":false,
+                "isSolid":true,
                 "behavior":"trap",
                 "moveSpeed":0,
                 "moveRange":0,
